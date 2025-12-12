@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Submit Your Enquiry</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial;
+        background: linear-gradient(120deg, #6a11cb, #2575fc);
+    }
+    .box {
+        width: 90%;
+        max-width: 450px;
+        background: white;
+        padding: 20px;
+        margin: 40px auto;
+        border-radius: 15px;
+    }
+    input, textarea, select {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #4b3aff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>Submit Your Enquiry</h2>
+
+    <input id="name" placeholder="Full Name *" />
+    <input id="email" placeholder="Email *" />
+    <input id="phone" placeholder="Phone *" />
+
+    <textarea id="message" rows="4" placeholder="Message *"></textarea>
+
+    <select id="leadType">
+        <option>Hot</option>
+        <option>Warm</option>
+        <option>Cold</option>
+    </select>
+
+    <input id="budget" placeholder="Budget (€)" />
+
+    <button onclick="submitForm()">Submit</button>
+</div>
+
+<!-- Firebase v8 (works on GitHub Pages) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+  // 🔥 YOUR FIREBASE CONFIG (DONE & CORRECTED)
+  const firebaseConfig = {
+    apiKey: "AIzaSyC6E2DWPHJZKQWuv6v3Bpyk9tVnkYU8dSk",
+    authDomain: "rafaqat-crm.firebaseapp.com",
+    databaseURL: "https://rafaqat-crm-default-rtdb.firebaseio.com",
+    projectId: "rafaqat-crm",
+    storageBucket: "rafaqat-crm.firebasestorage.app",
+    messagingSenderId: "321407849510",
+    appId: "1:321407849510:web:2200b31b9be0f6a9c1c2e7"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  var db = firebase.database();
+
+  function submitForm() {
+    let name = document.getElementById("name").value;
+    let email = document.getElementById("email").value;
+    let phone = document.getElementById("phone").value;
+    let message = document.getElementById("message").value;
+    let type = document.getElementById("leadType").value;
+    let budget = document.getElementById("budget").value;
+
+    if (!name || !email || !phone || !message) {
+      alert("Please fill all required fields");
+      return;
+    }
+
+    db.ref("enquiries").push({
+      name,
+      email,
+      phone,
+      message,
+      type,
+      budget,
+      time: new Date().toISOString()
+    })
+    .then(() => {
+      alert("Submitted successfully!");
+      location.reload();
+    })
+    .catch(err => alert("Error: " + err));
+  }
+</script>
+
+</body>
+</html>
